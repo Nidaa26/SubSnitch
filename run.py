@@ -18,7 +18,7 @@ import sys
 import time
 import webbrowser
 
-# Project paths -------------------------------------------------------------
+# Project paths 
 PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
 VENV_DIR = os.path.join(PROJECT_DIR, ".venv")
 URL = "http://127.0.0.1:5000"
