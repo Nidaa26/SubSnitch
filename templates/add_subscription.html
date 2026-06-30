@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Add Subscription — Subscription Autopsy{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>Add a Subscription</h1>
+        <p class="page-sub">Log a subscription and we'll start the autopsy.</p>
+    </div>
+</section>
+
+<div class="form-card">
+    <form method="post" action="{{ url_for('main.add_subscription') }}" novalidate>
+        {% include "_subscription_form.html" %}
+        <div class="form-actions">
+            <a class="btn btn-ghost" href="{{ url_for('main.subscriptions') }}">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add Subscription</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

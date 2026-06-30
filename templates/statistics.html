@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Statistics — Subscription Autopsy{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>Statistics</h1>
+        <p class="page-sub">The numbers behind your subscriptions.</p>
+    </div>
+    <div class="page-head-actions">
+        <a class="btn btn-secondary" href="{{ url_for('main.export_csv') }}">⬇ Export CSV</a>
+    </div>
+</section>
+
+{% if not has_data %}
+    <section class="empty-state">
+        <div class="empty-emoji">📊</div>
+        <h2>No subscriptions yet.</h2>
+        <p>Add a few subscriptions and your statistics will appear here.</p>
+        <a class="btn btn-primary" href="{{ url_for('main.add_subscription') }}">+ Add a subscription</a>
+    </section>
+{% else %}
+    <section class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-label">Most Expensive</span>
+            <span class="stat-value">{{ most_expensive.name }}</span>
+            <span class="stat-foot">{{ most_expensive.monthly_cost | money }} / mo</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Cheapest</span>
+            <span class="stat-value">{{ cheapest.name }}</span>
+            <span class="stat-foot">{{ cheapest.monthly_cost | money }} / mo</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Highest Cost Per Use</span>
+            <span class="stat-value">{{ highest_cpu.name }}</span>
+            <span class="stat-foot">{{ highest_cpu.cost_per_use | money }} per use</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Lowest Cost Per Use</span>
+            <span class="stat-value">{{ lowest_cpu.name }}</span>
+            <span class="stat-foot">{{ lowest_cpu.cost_per_use | money }} per use</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Longest Unused</span>
+            <span class="stat-value">{{ longest_unused.name }}</span>
+            <span class="stat-foot">
+                {% if longest_unused.days_since_used is not none %}
+                    {{ longest_unused.days_since_used }} days ago
+                {% else %}
+                    Never used
+                {% endif %}
+            </span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Average Monthly Spending</span>
+            <span class="stat-value">{{ avg_monthly | money }}</span>
+            <span class="stat-foot">across {{ count }} subscriptions</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Average Cost Per Use</span>
+            <span class="stat-value">{{ avg_cpu | money }}</span>
+            <span class="stat-foot">lower is better</span>
+        </div>
+        <div class="stat-card stat-card-alert">
+            <span class="stat-label">Estimated Money Wasted / yr</span>
+            <span class="stat-value">{{ wasted_year | money }}</span>
+            <span class="stat-foot">on wasteful subscriptions</span>
+        </div>
+    </section>
+
+    <!-- Subscription health breakdown rendered as a pure-CSS bar chart -->
+    <section class="section-block">
+        <div class="section-head">
+            <h2>Subscription Health Breakdown</h2>
+        </div>
+        <div class="breakdown">
+            {% for label, total in breakdown.items() %}
+                {% set pct = (total / count * 100) if count else 0 %}
+                <div class="breakdown-row">
+                    <span class="breakdown-label">
+                        <span class="badge badge-{{ label | lower }}">{{ label }}</span>
+                    </span>
+                    <span class="breakdown-track">
+                        <span class="breakdown-fill health-fill-{{ label | lower }}"
+                              style="width: {{ pct }}%;"></span>
+                    </span>
+                    <span class="breakdown-count">{{ total }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+{% endblock %}

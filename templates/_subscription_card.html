@@ -1,0 +1,53 @@
+{#
+  Reusable subscription card.
+  Expects a `subscription` variable (with a `roast` attribute attached by the
+  view). Used by the subscriptions list and the dashboard recent list.
+#}
+{% set sub = subscription %}
+{% set health_class = sub.health | lower %}
+<article class="sub-card health-{{ health_class }}">
+    <div class="sub-card-top">
+        <div>
+            <h3 class="sub-name">{{ sub.name }}</h3>
+            <span class="sub-category">{{ sub.category }}</span>
+        </div>
+        <span class="badge badge-{{ health_class }}">{{ sub.health }}</span>
+    </div>
+
+    <div class="sub-meta">
+        <div class="meta-item">
+            <span class="meta-label">Price</span>
+            <span class="meta-value">{{ sub.price | money }} / {{ sub.billing_cycle }}</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Cost / Use</span>
+            <span class="meta-value">{{ sub.cost_per_use | money }}</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Last Used</span>
+            <span class="meta-value">{{ sub.last_used | nice_date }}</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Uses This Cycle</span>
+            <span class="meta-value">{{ sub.uses }}</span>
+        </div>
+    </div>
+
+    <!-- Waste score progress bar (pure CSS) -->
+    <div class="waste-bar" title="Waste score: {{ sub.waste_score }}/100">
+        <div class="waste-bar-fill health-fill-{{ health_class }}"
+             style="width: {{ sub.waste_score }}%;"></div>
+    </div>
+    <div class="waste-score-label">Waste score: <strong>{{ sub.waste_score }}/100</strong></div>
+
+    <p class="roast">“{{ sub.roast }}”</p>
+
+    {% if sub.notes %}
+        <p class="sub-notes">📝 {{ sub.notes }}</p>
+    {% endif %}
+
+    <div class="sub-actions">
+        <a class="btn btn-secondary" href="{{ url_for('main.edit_subscription', subscription_id=sub.id) }}">Edit</a>
+        <a class="btn btn-danger" href="{{ url_for('main.delete_subscription', subscription_id=sub.id) }}">Delete</a>
+    </div>
+</article>

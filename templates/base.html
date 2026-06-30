@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Subscription Autopsy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Gradient site header with primary navigation -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{{ url_for('main.dashboard') }}">
+                <span class="brand-mark">🩺</span>
+                <span class="brand-text">Subscription&nbsp;Autopsy</span>
+            </a>
+            <nav class="nav">
+                <a href="{{ url_for('main.dashboard') }}"
+                   class="nav-link {{ 'active' if request.endpoint == 'main.dashboard' }}">Dashboard</a>
+                <a href="{{ url_for('main.subscriptions') }}"
+                   class="nav-link {{ 'active' if request.endpoint == 'main.subscriptions' }}">Subscriptions</a>
+                <a href="{{ url_for('main.statistics') }}"
+                   class="nav-link {{ 'active' if request.endpoint == 'main.statistics' }}">Statistics</a>
+                <a href="{{ url_for('main.add_subscription') }}" class="nav-link nav-cta">+ Add</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container page">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Subscription Autopsy &mdash; track it, measure it, roast it.</p>
+        </div>
+    </footer>
+</body>
+</html>

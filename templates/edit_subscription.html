@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ subscription.name }} — Subscription Autopsy{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>Edit Subscription</h1>
+        <p class="page-sub">Update the details for <strong>{{ subscription.name }}</strong>.</p>
+    </div>
+</section>
+
+<div class="form-card">
+    <form method="post"
+          action="{{ url_for('main.edit_subscription', subscription_id=subscription.id) }}"
+          novalidate>
+        {% include "_subscription_form.html" %}
+        <div class="form-actions">
+            <a class="btn btn-ghost" href="{{ url_for('main.subscriptions') }}">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

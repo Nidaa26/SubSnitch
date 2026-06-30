@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Subscription Autopsy{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Your Subscription Autopsy</h1>
+    <p class="hero-sub">A cold, hard look at where your money actually goes.</p>
+</section>
+
+<!-- Summary cards -->
+<section class="summary-grid">
+    <div class="summary-card">
+        <span class="summary-icon">💳</span>
+        <span class="summary-label">Total Monthly Spending</span>
+        <span class="summary-value">{{ total_monthly | money }}</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-icon">📅</span>
+        <span class="summary-label">Estimated Yearly Spending</span>
+        <span class="summary-value">{{ total_yearly | money }}</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-icon">📦</span>
+        <span class="summary-label">Active Subscriptions</span>
+        <span class="summary-value">{{ active_count }}</span>
+    </div>
+    <div class="summary-card summary-card-alert">
+        <span class="summary-icon">🔥</span>
+        <span class="summary-label">Potential Money Wasted / mo</span>
+        <span class="summary-value">{{ wasted_monthly | money }}</span>
+        <span class="summary-foot">{{ wasted_yearly | money }} per year</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-icon">🧮</span>
+        <span class="summary-label">Average Cost Per Use</span>
+        <span class="summary-value">{{ average_cost_per_use | money }}</span>
+    </div>
+</section>
+
+{% if active_count == 0 %}
+    <!-- Empty state -->
+    <section class="empty-state">
+        <div class="empty-emoji">🗂️</div>
+        <h2>No subscriptions yet.</h2>
+        <p>Start tracking your spending and find out which subscriptions are quietly draining your wallet.</p>
+        <a class="btn btn-primary" href="{{ url_for('main.add_subscription') }}">+ Add your first subscription</a>
+    </section>
+{% else %}
+    <!-- Highlight cards: worst & best -->
+    <section class="highlight-grid">
+        {% if worst %}
+        <div class="highlight-card highlight-worst">
+            <h2>🥀 Worst Subscription of the Month</h2>
+            <p class="highlight-name">{{ worst.name }}</p>
+            <p class="highlight-detail">
+                {{ worst.cost_per_use | money }} per use · waste score {{ worst.waste_score }}/100
+            </p>
+            <p class="roast">“{{ worst.roast }}”</p>
+            <a class="btn btn-secondary" href="{{ url_for('main.edit_subscription', subscription_id=worst.id) }}">Review it</a>
+        </div>
+        {% endif %}
+
+        {% if best %}
+        <div class="highlight-card highlight-best">
+            <h2>🏆 Best Value Subscription</h2>
+            <p class="highlight-name">{{ best.name }}</p>
+            <p class="highlight-detail">
+                {{ best.cost_per_use | money }} per use · waste score {{ best.waste_score }}/100
+            </p>
+            <p class="roast">“{{ best.roast }}”</p>
+            <a class="btn btn-secondary" href="{{ url_for('main.edit_subscription', subscription_id=best.id) }}">Keep it</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Recent subscriptions -->
+    <section class="section-block">
+        <div class="section-head">
+            <h2>Recently Added</h2>
+            <a class="link-arrow" href="{{ url_for('main.subscriptions') }}">View all →</a>
+        </div>
+        <div class="card-grid">
+            {% for subscription in recent %}
+                {% include "_subscription_card.html" %}
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+{% endblock %}

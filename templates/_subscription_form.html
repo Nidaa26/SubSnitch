@@ -1,0 +1,91 @@
+{#
+  Reusable subscription form fields shared by the add and edit pages.
+  Expects:
+    * `form_data`  - a mapping (request.form on error, a Subscription on edit,
+                     or {} on a fresh add) used to pre-fill the fields.
+    * `categories` - list of selectable categories.
+    * `billing_cycles` - list of billing cycle options.
+
+  A small macro reads a value from `form_data` whether it is a dict-like form
+  object or a model instance, so the same partial works everywhere.
+#}
+{% macro field_value(data, key) -%}
+    {%- if data is mapping -%}
+        {{ data.get(key, '') if data.get(key) is not none else '' }}
+    {%- else -%}
+        {{ data[key] if data[key] is not none else '' }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% set v_name = field_value(form_data, 'name') | trim %}
+{% set v_category = field_value(form_data, 'category') | trim %}
+{% set v_billing = field_value(form_data, 'billing_cycle') | trim %}
+{% set v_price = field_value(form_data, 'price') | trim %}
+{% set v_uses = field_value(form_data, 'uses') | trim %}
+{% set v_notes = field_value(form_data, 'notes') | trim %}
+
+{# Dates need ISO formatting when coming from a model instance. #}
+{% if form_data is mapping %}
+    {% set v_renewal = field_value(form_data, 'renewal_date') | trim %}
+    {% set v_last_used = field_value(form_data, 'last_used') | trim %}
+{% else %}
+    {% set v_renewal = form_data.renewal_date.strftime('%Y-%m-%d') if form_data.renewal_date else '' %}
+    {% set v_last_used = form_data.last_used.strftime('%Y-%m-%d') if form_data.last_used else '' %}
+{% endif %}
+
+<div class="form-grid">
+    <div class="form-field form-field-wide">
+        <label for="name">Subscription Name</label>
+        <input type="text" id="name" name="name" maxlength="100"
+               placeholder="e.g. Netflix" value="{{ v_name }}" required>
+    </div>
+
+    <div class="form-field">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+            <option value="" disabled {{ 'selected' if not v_category }}>Choose a category</option>
+            {% for category in categories %}
+                <option value="{{ category }}" {{ 'selected' if v_category == category }}>{{ category }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-field">
+        <label for="billing_cycle">Billing Cycle</label>
+        <select id="billing_cycle" name="billing_cycle" required>
+            {% for cycle in billing_cycles %}
+                <option value="{{ cycle }}" {{ 'selected' if v_billing == cycle }}>{{ cycle | capitalize }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-field">
+        <label for="price">Price (USD)</label>
+        <input type="number" id="price" name="price" step="0.01" min="0.01"
+               placeholder="9.99" value="{{ v_price }}" required>
+    </div>
+
+    <div class="form-field">
+        <label for="uses">Uses This Billing Cycle</label>
+        <input type="number" id="uses" name="uses" step="1" min="0"
+               placeholder="0" value="{{ v_uses }}" required>
+    </div>
+
+    <div class="form-field">
+        <label for="renewal_date">Renewal Date</label>
+        <input type="date" id="renewal_date" name="renewal_date"
+               value="{{ v_renewal }}" required>
+    </div>
+
+    <div class="form-field">
+        <label for="last_used">Last Used Date</label>
+        <input type="date" id="last_used" name="last_used"
+               value="{{ v_last_used }}" required>
+    </div>
+
+    <div class="form-field form-field-wide">
+        <label for="notes">Notes <span class="optional">(optional)</span></label>
+        <textarea id="notes" name="notes" rows="3"
+                  placeholder="Anything worth remembering about this subscription…">{{ v_notes }}</textarea>
+    </div>
+</div>

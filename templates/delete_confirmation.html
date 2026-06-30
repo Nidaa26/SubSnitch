@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Delete {{ subscription.name }} — Subscription Autopsy{% endblock %}
+
+{% block content %}
+<div class="confirm-card">
+    <div class="confirm-icon">🗑️</div>
+    <h1>Delete this subscription?</h1>
+    <p class="confirm-text">
+        You're about to permanently delete
+        <strong>{{ subscription.name }}</strong>
+        ({{ subscription.category }} · {{ subscription.price | money }} / {{ subscription.billing_cycle }}).
+        This action cannot be undone.
+    </p>
+
+    <div class="confirm-summary">
+        <div><span>Cost / Use</span><strong>{{ subscription.cost_per_use | money }}</strong></div>
+        <div><span>Last Used</span><strong>{{ subscription.last_used | nice_date }}</strong></div>
+        <div><span>Health</span><strong>{{ subscription.health }}</strong></div>
+    </div>
+
+    <div class="confirm-actions">
+        <a class="btn btn-ghost" href="{{ url_for('main.subscriptions') }}">Cancel</a>
+        <form method="post"
+              action="{{ url_for('main.delete_subscription', subscription_id=subscription.id) }}">
+            <button type="submit" class="btn btn-danger">Yes, delete it</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

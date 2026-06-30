@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Subscriptions — Subscription Autopsy{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>Your Subscriptions</h1>
+        <p class="page-sub">{{ subscriptions | length }} of {{ total_count }} shown</p>
+    </div>
+    <div class="page-head-actions">
+        <a class="btn btn-secondary" href="{{ url_for('main.export_csv') }}">⬇ Export CSV</a>
+        <a class="btn btn-primary" href="{{ url_for('main.add_subscription') }}">+ Add Subscription</a>
+    </div>
+</section>
+
+<!-- Search, filter and sort controls (all GET, no JavaScript) -->
+<form class="toolbar" method="get" action="{{ url_for('main.subscriptions') }}">
+    <div class="toolbar-row">
+        <div class="toolbar-field toolbar-search">
+            <label for="search">Search</label>
+            <input type="text" id="search" name="search" value="{{ search }}"
+                   placeholder="Search by name…">
+        </div>
+
+        <div class="toolbar-field">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+                <option value="all" {{ 'selected' if selected_category == 'all' }}>All categories</option>
+                {% for category in categories %}
+                    <option value="{{ category }}" {{ 'selected' if selected_category == category }}>{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="toolbar-field">
+            <label for="billing_cycle">Billing</label>
+            <select id="billing_cycle" name="billing_cycle">
+                <option value="all" {{ 'selected' if selected_billing == 'all' }}>All cycles</option>
+                {% for cycle in billing_cycles %}
+                    <option value="{{ cycle }}" {{ 'selected' if selected_billing == cycle }}>{{ cycle | capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="toolbar-field">
+            <label for="health">Health</label>
+            <select id="health" name="health">
+                <option value="all" {{ 'selected' if selected_health == 'all' }}>All health</option>
+                {% for option in health_options %}
+                    <option value="{{ option }}" {{ 'selected' if selected_health == option }}>{{ option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="toolbar-field">
+            <label for="sort">Sort by</label>
+            <select id="sort" name="sort">
+                {% for value, label in sort_options.items() %}
+                    <option value="{{ value }}" {{ 'selected' if selected_sort == value }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="toolbar-actions">
+            <button type="submit" class="btn btn-primary">Apply</button>
+            <a class="btn btn-ghost" href="{{ url_for('main.subscriptions') }}">Reset</a>
+        </div>
+    </div>
+</form>
+
+{% if total_count == 0 %}
+    <!-- No subscriptions exist at all -->
+    <section class="empty-state">
+        <div class="empty-emoji">🗂️</div>
+        <h2>No subscriptions yet.</h2>
+        <p>Start tracking your spending and find out which subscriptions are quietly draining your wallet.</p>
+        <a class="btn btn-primary" href="{{ url_for('main.add_subscription') }}">+ Add your first subscription</a>
+    </section>
+{% elif subscriptions | length == 0 %}
+    <!-- Subscriptions exist but none match the current filters -->
+    <section class="empty-state">
+        <div class="empty-emoji">🔍</div>
+        <h2>No matches found.</h2>
+        <p>Try widening your search or clearing the filters.</p>
+        <a class="btn btn-secondary" href="{{ url_for('main.subscriptions') }}">Clear filters</a>
+    </section>
+{% else %}
+    <section class="card-grid">
+        {% for subscription in subscriptions %}
+            {% include "_subscription_card.html" %}
+        {% endfor %}
+    </section>
+{% endif %}
+{% endblock %}
