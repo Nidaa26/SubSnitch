@@ -1,8 +1,4 @@
-"""Utility helpers.
 
-Houses small reusable pieces that do not belong in the models or routes:
-form parsing/validation, list filtering and sorting, and CSV generation.
-"""
 
 import csv
 import io
@@ -63,24 +59,24 @@ def validate_subscription_form(form):
     """
     errors = []
 
-    # Name -----------------------------------------------------------------
+    # Name 
     name = (form.get("name") or "").strip()
     if not name:
         errors.append("Subscription name is required.")
     elif len(name) > 100:
         errors.append("Subscription name must be 100 characters or fewer.")
 
-    # Category -------------------------------------------------------------
+    # Category 
     category = (form.get("category") or "").strip()
     if category not in CATEGORIES:
         errors.append("Please choose a valid category.")
 
-    # Billing cycle --------------------------------------------------------
+    # Billing cycle 
     billing_cycle = (form.get("billing_cycle") or "").strip().lower()
     if billing_cycle not in BILLING_CYCLES:
         errors.append("Billing cycle must be monthly or yearly.")
 
-    # Price ----------------------------------------------------------------
+    # Price 
     price = None
     raw_price = (form.get("price") or "").strip()
     try:
@@ -90,17 +86,17 @@ def validate_subscription_form(form):
     except ValueError:
         errors.append("Price must be a valid number.")
 
-    # Renewal date ---------------------------------------------------------
+    # Renewal date 
     renewal_date = parse_date(form.get("renewal_date"))
     if renewal_date is None:
         errors.append("Please provide a valid renewal date.")
 
-    # Last used date -------------------------------------------------------
+    # Last used date 
     last_used = parse_date(form.get("last_used"))
     if last_used is None:
         errors.append("Please provide a valid last-used date.")
 
-    # Uses -----------------------------------------------------------------
+    # Uses 
     uses = None
     raw_uses = (form.get("uses") or "").strip()
     try:
@@ -110,7 +106,7 @@ def validate_subscription_form(form):
     except ValueError:
         errors.append("Number of uses must be a whole number.")
 
-    # Notes (optional) -----------------------------------------------------
+    # Notes (optional) 
     notes = (form.get("notes") or "").strip()
 
     data = {
