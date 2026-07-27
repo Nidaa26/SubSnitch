@@ -1,4 +1,4 @@
-# 🩺 Subscription Autopsy
+# SUBSNITCH.
 
 > Track your subscriptions, measure how much value you *actually* get out of
 > each one, and get roasted for the ones you've forgotten you're paying for.
