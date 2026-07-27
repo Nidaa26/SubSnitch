@@ -179,9 +179,3 @@ SubSnitch/
 - Currency selection and localisation
 - Dark / light theme toggle
 
----
-
-## 📄 License
-
-Released under the [MIT License](https://opensource.org/licenses/MIT).
-You're free to use, modify and share it.
