@@ -3,7 +3,7 @@
 > Track your subscriptions, measure how much value you *actually* get out of
 > each one, and get roasted for the ones you've forgotten you're paying for.
 
-**Subscription Autopsy** is a polished, dark-themed Flask web app that lets you
+**SUBSNITCH** is a polished, dark-themed Flask web app that lets you
 manually log your subscriptions (Netflix, Spotify, ChatGPT Plus, Adobe, Amazon
 Prime, …) and find out how much money you're getting per use. It calculates a
 **cost per use**, flags wasteful subscriptions, and generates a fresh, funny
@@ -11,8 +11,6 @@ Prime, …) and find out how much money you're getting per use. It calculates a
 
 Built with **Python, Flask, SQLite, HTML5 and CSS3** — no JavaScript, no
 frontend frameworks.
-
----
 
 ## ✨ Features
 
@@ -36,7 +34,6 @@ frontend frameworks.
   dark UI** with a gradient header, rounded cards, hover effects and smooth CSS
   animations.
 
----
 
 ## 🖼️ Screenshots
 
