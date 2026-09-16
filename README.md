@@ -37,13 +37,12 @@ frontend frameworks.
 
 ## 🖼️ Screenshots
 
-> _Placeholder — drop your own screenshots in here._
+> _Placeholder — insert screenshots_
 
 | Dashboard | Subscriptions | Statistics |
 | --------- | ------------- | ---------- |
 | _screenshot_ | _screenshot_ | _screenshot_ |
 
----
 
 ## 🚀 Quick Start (run it right now)
 
@@ -62,7 +61,6 @@ Or use the convenience scripts:
 
 Then open <http://127.0.0.1:5000> (the launcher tries to open it automatically).
 
----
 
 ## 🛠️ Manual Setup
 
@@ -106,7 +104,6 @@ python app.py
 The SQLite database (`database.db`) is created automatically on first run.
 Visit <http://127.0.0.1:5000> in your browser.
 
----
 
 ## 📦 Requirements
 
@@ -116,7 +113,6 @@ Visit <http://127.0.0.1:5000> in your browser.
 
 (All Python dependencies are pinned in `requirements.txt`.)
 
----
 
 ## 📂 Folder Structure
 
@@ -152,7 +148,6 @@ SubSnitch/
         └── style.css       # Dark SaaS theme (pure CSS)
 ```
 
----
 
 ## 🧮 How the analysis works
 
@@ -165,7 +160,6 @@ SubSnitch/
 - **Waste score (0–100)** blends how expensive each use is with how long the
   subscription has gone unused.
 
----
 
 ## 🔮 Future Improvements
 
